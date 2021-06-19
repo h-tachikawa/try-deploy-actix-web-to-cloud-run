@@ -1563,6 +1563,7 @@ name = "try-deploy-actix-web-to-cloud-run"
 version = "0.1.0"
 dependencies = [
  "actix-web",
+ "serde",
 ]
 
 [[package]]
