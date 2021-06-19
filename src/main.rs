@@ -1,3 +1,5 @@
+mod http_client;
+
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use serde::Serialize;
 
@@ -14,12 +16,23 @@ async fn hello() -> impl Responder {
 }
 
 #[get("/json")]
-async fn json() -> impl Responder {
+async fn get_json() -> impl Responder {
     HttpResponse::Ok().json(MyResponse {
-        str: "テスト".to_string(),
+        str: "test".to_string(),
         num: 100,
         arr: vec![1, 2, 3],
     })
+}
+
+#[get("/json_via_external_source")]
+async fn get_json_via_external_source() -> impl Responder {
+    let result = http_client::http_client_module::get(
+        "https://jsonplaceholder.typicode.com/todos".to_string(),
+    )
+    .await;
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .body(result)
 }
 
 #[post("/echo")]
@@ -37,7 +50,8 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(hello)
             .service(echo)
-            .service(json)
+            .service(get_json)
+            .service(get_json_via_external_source)
             .route("/hey", web::get().to(manual_hello))
     })
     .bind("0.0.0.0:8080")?
