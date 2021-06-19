@@ -1,0 +1,10 @@
+[package]
+name = "try-deploy-actix-web-to-cloud-run"
+version = "0.1.0"
+authors = ["tachikawa <tachikawa@feedforce.jp>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "3"
