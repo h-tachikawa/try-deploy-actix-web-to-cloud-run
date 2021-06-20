@@ -30,9 +30,13 @@ async fn get_json_via_external_source() -> impl Responder {
         "https://jsonplaceholder.typicode.com/todos".to_string(),
     )
     .await;
-    HttpResponse::Ok()
-        .content_type("application/json")
-        .body(result)
+
+    match result {
+        Ok(res) => HttpResponse::Ok()
+            .content_type("application/json")
+            .body(res),
+        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+    }
 }
 
 #[post("/echo")]
